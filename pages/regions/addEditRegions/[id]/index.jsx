@@ -1,0 +1,101 @@
+import React,{useEffect,useState} from "react";
+import {CREATE_REGION,UPDATE_REGION} from '../../../../graphQL/mutation/RegionMutation'
+import { GET_REGION_BY_ID } from '../../../../graphQL/query/RegionsQry';
+import { CallApi } from "../../../../utilities/CallApi";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { Button } from "@mui/material";
+
+export default function AddEditRegion() {
+    const [name, setName] = useState("");
+    const [code, setCode] = useState("");
+    const [regionImageUrl, setRegionImageUrl] = useState("");
+    const router = useRouter();
+     const { id } = router.query;
+
+    useEffect(() => {
+        router.isReady && id && id?.length > 0 && fetchRegionById(id);
+    
+    }, [router.isReady, id]);
+
+
+    const fetchRegionById = (id) => {
+        CallApi("query", GET_REGION_BY_ID, {id:id})
+        .then((res)=>{
+            return res;
+        })
+        .then((res)=>{
+            if(res){
+                console.log("Region data:", res.data.regionById);
+                setName(res.data.regionById.name);
+                setCode(res.data.regionById.code);
+                setRegionImageUrl(res.data.regionById.regionImageUrl);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching region by ID:", error);
+        });
+    }
+    const createRegion=()=>{
+        const variable = {
+            name:name,
+            code:code,
+            regionImageUrl:regionImageUrl
+        }
+        if(id && id?.length>0){
+            try{
+CallApi("mutation", UPDATE_REGION, {id:id, input:variable})
+            .then((res)=>res)
+            .then((res)=>{
+                if(res){
+
+                    router.push("/regions");
+                    console.log("Region created successfully:", res.data.createRegion);
+                }
+            }).catch
+            (error=>{
+                console.log("eror while updating",error)
+            })
+            }
+            catch{
+                console.log("erro while updating")
+            }
+            
+        }
+        else{
+        try{
+
+            CallApi("mutation", CREATE_REGION, {input:variable})
+            .then((res)=>{
+                return res;}
+            )
+            .then((res)=>{
+                if(res){
+                    router.push("/regions");
+                    console.log("Region created successfully:", res.data.createRegion);
+                }
+            })
+            .catch(error => {
+                console.error("Error creating region:", error);
+            });
+        }
+        catch{
+            console.log("erro while updating")
+        }
+    }
+    }
+    
+    return<>
+   <h1>{id && id?.length>0 ? "Edit Region" : "Add Region"}</h1>
+    <Link href="/regions">
+         <Button variant="contained" color="primary">Back to Regions</Button>
+   </Link>
+   
+       <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+       <input type="text" placeholder="Code" value={code} onChange={(e) => setCode(e.target.value)} required />
+       <input type="text" placeholder="Region Image URL" value={regionImageUrl} onChange={(e) => setRegionImageUrl(e.target.value)} required />
+       <Button onClick={createRegion} >{id && id?.length>0 ? "Update Region" : "Create Region"}</Button>
+   
+    </>
+
+}
