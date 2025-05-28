@@ -1,7 +1,7 @@
 import React,{useEffect} from "react";
 import { CallApi } from "../utilities/CallApi";
-import {LOGIN_USER} from "/graphql/mutation/AuthMutation";
-import { GET_REGIONS } from "/graphql/query/RegionsQry";
+import {LOGIN_USER} from "../graphQL/mutation/AuthMutation";
+import { GET_REGIONS } from "../graphQL/query/RegionsQry";
 import Link from "next/link";
 
 export default function Home() {
