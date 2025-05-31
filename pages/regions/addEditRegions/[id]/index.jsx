@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from "react";
-import {CREATE_REGION,UPDATE_REGION} from '../../../../graphQL/mutation/RegionMutation'
+import {CREATE_REGION,UPDATE_REGION,DELETE_REGION} from '../../../../graphQL/mutation/RegionMutation'
 import { GET_REGION_BY_ID } from '../../../../graphQL/query/RegionsQry';
 import { CallApi } from "../../../../utilities/CallApi";
 import { useRouter } from "next/router";
@@ -85,16 +85,59 @@ CallApi("mutation", UPDATE_REGION, {id:id, input:variable})
     }
     }
     
+    const deleteRegion=()=>{
+        if(id && id?.length>0){
+            try{
+                CallApi("mutation", DELETE_REGION, {id:id})
+                .then((res)=>res)
+                .then((res)=>{
+                    if(res){
+                        router.push("/regions");
+                        console.log("Region deleted successfully:", res.data.deleteRegion);
+                    }
+                }).catch
+                (error=>{
+                    console.log("eror while deleting",error)
+                })
+            }
+            catch{
+                console.log("erro while deleting")
+            }
+        }
+    }
+
+
     return<>
-   <h1>{id && id?.length>0 ? "Edit Region" : "Add Region"}</h1>
+   <h1>{id && id?.length>1 ? "Edit Region" : "Add Region"}</h1>
     <Link href="/regions">
          <Button variant="contained" color="primary">Back to Regions</Button>
    </Link>
-   
+            <div>
+            <div style={{marginTop:'5px'}}>
+
        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+             <div style={{marginTop:'5px'}}>
+
        <input type="text" placeholder="Code" value={code} onChange={(e) => setCode(e.target.value)} required />
+            </div>
+            <div style={{marginTop:'5px'}}>   
        <input type="text" placeholder="Region Image URL" value={regionImageUrl} onChange={(e) => setRegionImageUrl(e.target.value)} required />
-       <Button onClick={createRegion} >{id && id?.length>0 ? "Update Region" : "Create Region"}</Button>
+            </div>  
+             <div style={{marginTop:'5px'}}>
+                
+       <Button
+variant="contained" color="primary"
+        onClick={createRegion} >{id && id?.length>1 ? "Update Region" : "Create Region"}
+
+       </Button>
+       <Button  sx={{marginLeft:'5px'}}
+variant="contained" color="primary"
+        onClick={deleteRegion} >Delete Region
+
+       </Button>
+            </div>
+            </div>
    
     </>
 

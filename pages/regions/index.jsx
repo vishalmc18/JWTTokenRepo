@@ -44,6 +44,7 @@ const RegionsList = () => {
     });
     setLoading(false)
   }, []);
+ 
 
   const onCreateRegionClick = () => {
     router.push(`/regions/addEditRegions/0`);

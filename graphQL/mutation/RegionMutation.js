@@ -15,3 +15,8 @@ export const UPDATE_REGION = gql`
     }
   }
 `;
+export const DELETE_REGION = gql`
+  mutation DeleteRegion($id: UUID!) {
+    deleteRegion(id: $id) 
+  }
+`;
