@@ -20,3 +20,27 @@ export const DELETE_REGION = gql`
     deleteRegion(id: $id) 
   }
 `;
+
+
+export const REGION_CREATED_SUBSCRIPTION = gql`
+  subscription {
+    onRegionCreated {
+      id
+      name
+      code
+      regionImageUrl
+    }
+  }
+`;
+export const SIMPLE_TRIGGER_SUBSCRIPTION = gql`
+  subscription {
+    onSimpleTrigger 
+      
+  }
+`;
+
+export const SIMPLE_TRIGGER_MUTATION = gql`
+  mutation SimpleTrigger {
+      triggerSimpleEvent
+  }
+`;

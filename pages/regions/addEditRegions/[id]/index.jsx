@@ -20,6 +20,8 @@ export default function AddEditRegion() {
 
 
     const fetchRegionById = (id) => {
+        if(!id || id?.length<1){
+            return}
         CallApi("query", GET_REGION_BY_ID, {id:id})
         .then((res)=>{
             return res;
@@ -42,7 +44,7 @@ export default function AddEditRegion() {
             code:code,
             regionImageUrl:regionImageUrl
         }
-        if(id && id?.length>0){
+        if(id && id?.length>1){
             try{
 CallApi("mutation", UPDATE_REGION, {id:id, input:variable})
             .then((res)=>res)
