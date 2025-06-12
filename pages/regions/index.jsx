@@ -31,7 +31,7 @@ useSubscription(SIMPLE_TRIGGER_SUBSCRIPTION, {
       // You can handle the data as needed here
       // Example: alert or set some state
       if (subscriptionData.data && subscriptionData.data.onSimpleTrigger) {
-        // alert("Simple trigger received: " + subscriptionData.data.onSimpleTrigger);
+        alert("Simple trigger received: " + subscriptionData.data.onSimpleTrigger);
         fetchRegions(); // Optionally refresh the regions list
       }
     }
