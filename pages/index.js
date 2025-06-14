@@ -5,7 +5,7 @@ import { GET_REGIONS } from "../graphQL/query/RegionsQry";
 import Link from "next/link";
 
 export default function Home() {
-  const[loading, setLoading] = useState(false);
+  const[loading, setLoading] = useState(true);
   useEffect(() => {
     const variables={
      userName: "user@example.com",
@@ -43,12 +43,16 @@ export default function Home() {
      <div className="relative min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200 flex flex-col">
       {/* Top-right Link */}
       <div className="absolute top-6 right-8">
-       {loading? <span>loading...</span>: <Link
+       {loading ? (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white bg-opacity-60">
+    <span className="text-lg font-semibold">Loading...</span>
+  </div>
+) : ( <Link
           href="/regions"
           className="px-5 py-2 rounded-full bg-blue-500 text-white font-semibold shadow-lg hover:bg-blue-600 transition"
         >
           Regions
-        </Link>}
+        </Link>)}
       </div>
       {/* Centered Content */}
       <div className="flex flex-1 flex-col items-center justify-center">

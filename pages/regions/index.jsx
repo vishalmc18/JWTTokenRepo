@@ -6,15 +6,16 @@ import { CallApi } from "../../utilities/CallApi";
 import { useRouter } from "next/router";
 import { REGION_CREATED_SUBSCRIPTION,SIMPLE_TRIGGER_MUTATION,SIMPLE_TRIGGER_SUBSCRIPTION } from '../../graphQL/mutation/RegionMutation';
 import { useSubscription } from "@apollo/client";
-
+import Snackbar from '@mui/material/Snackbar';
 const RegionsList = () => {
   const [regionList, setRegionList] = useState([]);
   const [columnHeaders,setColumnHeaders] = useState([])
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarMsg, setSnackbarMsg] = useState('');
 
-
-  // ... your existing code
+  // ... your existing code 
 
   // Listen for new regions
 //   useSubscription(REGION_CREATED_SUBSCRIPTION, {
@@ -31,8 +32,10 @@ useSubscription(SIMPLE_TRIGGER_SUBSCRIPTION, {
       // You can handle the data as needed here
       // Example: alert or set some state
       if (subscriptionData.data && subscriptionData.data.onSimpleTrigger) {
-        alert("New Event Triggered ");
         fetchRegions(); // Optionally refresh the regions list
+        // alert("New Event Triggered ");
+         setSnackbarMsg("New Event Triggered");
+    setSnackbarOpen(true);
       }
     }
   });
@@ -113,6 +116,24 @@ useSubscription(SIMPLE_TRIGGER_SUBSCRIPTION, {
         >Trigger Event</Button>
      
       {!loading && regionList.length == 0 && <p>Loading... </p>}
+      <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={3000}
+  onClose={() => setSnackbarOpen(false)}
+  message={snackbarMsg}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  ContentProps={{
+    sx: {
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      position: 'fixed',
+      minWidth: 200,
+      textAlign: 'center',
+      zIndex: 1400, // above most elements
+    }
+  }}
+/>
       {!loading && regionList?.length>0&&<MuiTable columnHeaders={columnHeaders} dataList={regionList} />}
     </>
   );
